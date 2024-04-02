@@ -13,8 +13,8 @@ func ReadRequestBody(request *http.Request, result interface{}) {
 }
 
 func WriteResponseBody(writer http.ResponseWriter, response web.Response) {
-	writer.WriteHeader(response.Code)
 	writer.Header().Add("Content-Type", "application/json")
+	writer.WriteHeader(response.Code)
 	encoder := json.NewEncoder(writer)
 	err := encoder.Encode(response)
 	PanicIfError(err)

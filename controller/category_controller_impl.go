@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"go-restful/exception"
 	"go-restful/helper"
 	"go-restful/model/web"
@@ -93,10 +92,7 @@ func (controller *CategoryControllerImpl) FindAll(writer http.ResponseWriter, re
 		Data:    categories,
 	}
 
-	writer.Header().Add("Content-Type", "application/json")
-	encoder := json.NewEncoder(writer)
-	err := encoder.Encode(response)
-	helper.PanicIfError(err)
+	helper.WriteResponseBody(writer, response)
 }
 
 func (controller *CategoryControllerImpl) FindById(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
