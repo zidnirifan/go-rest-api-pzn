@@ -1,30 +1,26 @@
 package main
 
 import (
-	"go-restful/app"
-	"go-restful/controller"
 	"go-restful/helper"
 	"go-restful/middleware"
-	"go-restful/repository"
-	"go-restful/service"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
 )
 
-func main() {
-	db := app.NewDB()
-	validate := validator.New()
-	categoryRepository := repository.NewCategoryRepository()
-	categoryService := service.NewCategoryService(categoryRepository, db, validate)
-	categoryController := controller.NewCategoryController(categoryService)
-
-	router := app.NewRouter(categoryController)
-
-	server := http.Server{
+func NewServer(router http.Handler) *http.Server {
+	return &http.Server{
 		Addr:    "localhost:3000",
 		Handler: middleware.NewAuthMiddleware(router),
 	}
+}
+
+func NewValidator() *validator.Validate {
+	return validator.New(validator.WithRequiredStructEnabled())
+}
+
+func main() {
+	server := InitializedServer()
 
 	err := server.ListenAndServe()
 	helper.PanicIfError(err)
