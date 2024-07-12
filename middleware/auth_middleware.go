@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"go-restful/config"
 	"go-restful/helper"
 	"go-restful/model/web"
 	"net/http"
@@ -15,7 +16,8 @@ func NewAuthMiddleware(handler http.Handler) *AuthMiddleware {
 }
 
 func (middleware *AuthMiddleware) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	if request.Header.Get("X-API-Key") == "RAHASIA" {
+	apiKey := config.GetConfig().ApiKey
+	if request.Header.Get("X-API-Key") == apiKey {
 		middleware.Handler.ServeHTTP(writer, request)
 	} else {
 		response := web.Response{

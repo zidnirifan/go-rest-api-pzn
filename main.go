@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"go-restful/config"
 	"go-restful/helper"
 	"go-restful/middleware"
 	"net/http"
@@ -9,8 +11,10 @@ import (
 )
 
 func NewServer(router http.Handler) *http.Server {
+	port := config.GetConfig().Port
+
 	return &http.Server{
-		Addr:    "localhost:3000",
+		Addr:    fmt.Sprintf("localhost:%s", port),
 		Handler: middleware.NewAuthMiddleware(router),
 	}
 }
